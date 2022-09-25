@@ -225,3 +225,6 @@ dmypy.json
 # Cython debug symbols
 cython_debug/
 
+# project specific
+db.sqlite3
+secret.key

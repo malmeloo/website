@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
 from pathlib import Path
+import uuid
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -19,33 +20,22 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure--sauauf68eww#(_#^ic09&6)k%v8q7h_1o_8e$jn=hei-)+aoi'
-
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'website']
 
-ALLOWED_HOSTS = ['172.18.0.1']
-
-LOGGING = {
-   'version': 1,
-   'disable_existing_loggers': False,
-   'handlers': {
-      'file': {
-         'level': 'DEBUG',
-         'class': 'logging.FileHandler',
-         'filename': '/tmp/debug.log',
-      },
-   },
-   'loggers': {
-      'django': {
-         'handlers': ['file'],
-         'level': 'DEBUG',
-         'propagate': True,
-      },
-   },
-}
-
+# SECURITY WARNING: keep the secret key used in production secret!
+SECRET_KEY = 'secret-insecure'
+if not DEBUG:
+    # use secret key in production, or generate if not exists
+    try:
+        with (BASE_DIR / 'secret.key').open('r') as file:
+            SECRET_KEY = file.read().strip()
+    except FileNotFoundError:
+        print('INFO: Generating new secret key')
+        SECRET_KEY = str(uuid.uuid1())
+        with (BASE_DIR / 'secret.key').open('w+') as file:
+            file.write(SECRET_KEY)
 
 
 # Application definition
