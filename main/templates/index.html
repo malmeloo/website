@@ -11,7 +11,7 @@
     <h1>Mikealmel.ooo - Admin (CONFIDENTIAL)</h1>
     <p>WARNING: The source IP is not in the allowlist. Reporting website access</p>
     <br/>
-    <p>{{ headers }}</p>
+    <p>{{ headers }}{% if country_code %} ({{ country_code }}){% endif %}</p>
 
     <button onclick="alert('{{ ip }}\n\nI am coming for you and your family')">Log In</button>
   </body>
