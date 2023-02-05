@@ -226,5 +226,5 @@ dmypy.json
 cython_debug/
 
 # project specific
-db.sqlite3
+/static/
 secret.key
