@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
+import importlib.util
 from pathlib import Path
 
 from django.core.management.utils import get_random_secret_key
@@ -51,6 +52,8 @@ INSTALLED_APPS = [
 
     'apps.home'
 ]
+if importlib.util.find_spec('django_sass'):  # only in dev environment
+    INSTALLED_APPS.append('django_sass')
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -133,6 +136,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_ROOT = BASE_DIR / 'static'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
