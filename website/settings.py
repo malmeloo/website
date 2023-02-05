@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
 from pathlib import Path
+from django.core.management.utils import get_random_secret_key
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -19,11 +20,21 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-)y(5m3!(w1i5!ty9gfhd8^1f91n=qlhk5z!w_flm13+(0h$wju'
-
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+
+# SECURITY WARNING: keep the secret key used in production secret!
+SECRET_KEY = 'django-insecure'
+if not DEBUG:
+    try:
+        with (BASE_DIR / 'secret.key').open('r') as f:
+            SECRET_KEY = f.read().strip()
+        print('KEY: Loaded from disk')
+    except (FileNotFoundError, IOError):
+        SECRET_KEY = get_random_secret_key()
+        with (BASE_DIR / 'secret.key').open('w+') as f:
+            f.write(SECRET_KEY)
+        print('KEY: Generated and saved to disk')
 
 ALLOWED_HOSTS = []
 
