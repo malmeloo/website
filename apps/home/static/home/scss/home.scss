@@ -1,2 +1,19 @@
 @charset "utf-8";
 @import "bulma/bulma.sass";
+
+// Auxiliary
+@import "darkmode";
+
+
+// Animations
+body {
+  transition: all 0.4s ease;
+}
+
+.no-transition {
+  -o-transition: none !important;
+  -ms-transition: none !important;
+  -moz-transition: none !important;
+  -webkit-transition: none !important;
+  transition: none !important;
+}
