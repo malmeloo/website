@@ -18,12 +18,12 @@ from django.core.management.utils import get_random_secret_key
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+COMPRESS_ENABLED = True
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure'
@@ -50,10 +50,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'compressor',
+
     'apps.home'
 ]
-if importlib.util.find_spec('django_sass'):  # only in dev environment
-    INSTALLED_APPS.append('django_sass')
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -67,6 +67,7 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'website.urls'
 
+# noinspection PyUnresolvedReferences
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -83,10 +84,16 @@ TEMPLATES = [
     },
     {
         'BACKEND': 'django.template.backends.jinja2.Jinja2',
-        'DIRS': [],
+        'DIRS': [
+            # needed to discover templates in compressor package
+            Path(__import__('compressor').__file__).parent / 'templates'
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
-            'environment': 'website.jinja2.environment'
+            'environment': 'website.jinja2.environment',
+            'extensions': [
+                'compressor.contrib.jinja2ext.CompressorExtension'
+            ]
         }
     },
 ]
@@ -131,6 +138,26 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 
 USE_TZ = True
+
+# Django-compress & libsass & purgecss
+COMPRESS_PRECOMPILERS = (
+    ('text/x-scss', 'django_libsass.SassCompiler'),
+)
+COMPRESS_FILTERS = {
+    'css': [
+        'website.purgecss.PurgeCSSFilter',
+        'compressor.filters.cssmin.rCSSMinFilter'
+    ],
+    'js': [
+        'compressor.filters.jsmin.rJSMinFilter'
+    ]
+}
+STATICFILES_FINDERS = (
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'compressor.finders.CompressorFinder',
+)
+LIBSASS_OUTPUT_STYLE = 'compressed'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
