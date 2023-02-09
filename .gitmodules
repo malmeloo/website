@@ -1,0 +1,6 @@
+[submodule "lib/bulma"]
+	path = lib/bulma
+	url = https://github.com/jgthms/bulma
+[submodule "lib/bulma-prefers-dark"]
+	path = lib/bulma-prefers-dark
+	url = https://github.com/jloh/bulma-prefers-dark
