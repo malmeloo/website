@@ -4,24 +4,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{% block title %}{% endblock %} - Mike Almeloo</title>
 
-    <script>
-        function setDarkMode(on, transition = true) {
-            if (!transition) document.body.classList.add("no-transition")
-            on ? document.body.classList.add("dark") : document.body.classList.remove("dark")
-            if (!transition) {
-                // Needed to force reflow and prevent transitions
-                // Also see: https://medium.com/building-blocks/how-to-skip-css-transitions-with-jquery-e0155d06e82e
-                document.body.offsetHeight;
-
-                document.body.classList.remove("no-transition")
-            }
-        }
-    </script>
     {% block head %}
     {% endblock %}
 
     <!-- libraries -->
-    <link rel="stylesheet" href="{{ static('home/scss/home.scss') }}"/>
+    {% compress css %}
+        <link rel="stylesheet" type="text/x-scss" href="{{ static('home/scss/home.scss') }}"/>
+    {% endcompress %}
 </head>
 <body class="dark">
 {% block body %}

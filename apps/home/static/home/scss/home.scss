@@ -1,19 +1,11 @@
 @charset "utf-8";
 @import "../../../../../lib/bulma/bulma.sass";
 
-// Auxiliary
-@import "../../../../../lib/bulma-prefers-dark/bulma-prefers-dark.sass";
 
-
-// Animations
-body {
-  transition: all 0.4s ease;
+html, body {
+  height: 100%
 }
 
-.no-transition {
-  -o-transition: none !important;
-  -ms-transition: none !important;
-  -moz-transition: none !important;
-  -webkit-transition: none !important;
-  transition: none !important;
+body {
+  background-color: $black-ter
 }
