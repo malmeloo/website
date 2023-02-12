@@ -1,0 +1,24 @@
+// Generic
+.tile {
+  height: 100%;
+}
+
+.tile.is-ancestor {
+  width: 60%;
+  margin: auto;
+}
+
+.web-tile {
+  border: 1px solid $tile-border;
+  border-radius: 20px;
+  padding: 20px;
+  margin-bottom: 1.5rem;
+
+  transition: height 0.5s;
+
+  height: var(width);
+
+  p {
+    color: $tile-border;
+  }
+}

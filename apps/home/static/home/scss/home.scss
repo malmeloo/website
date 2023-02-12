@@ -1,11 +1,23 @@
 @charset "utf-8";
+
+// Libs
+$fa-font-path: "../../webfonts";
+
 @import "../../../../../lib/bulma/bulma.sass";
+@import "../../../../../lib/Font-Awesome/scss/fontawesome";
+@import "../../../../../lib/Font-Awesome/scss/solid";
+
+// Custom modules
+@import "colors";
+@import "tiles";
 
 
+// Set background
 html, body {
-  height: 100%
+  min-height: 100%;
 }
 
-body {
-  background-color: $black-ter
+html {
+  background-color: $bg;
 }
+
