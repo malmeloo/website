@@ -140,6 +140,7 @@ USE_I18N = True
 USE_TZ = True
 
 # Django-compress & libsass & purgecss
+COMPRESS_OUTPUT_DIR = 'compressed'
 COMPRESS_PRECOMPILERS = (
     ('text/x-scss', 'django_libsass.SassCompiler'),
 )
