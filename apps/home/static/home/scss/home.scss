@@ -12,6 +12,10 @@ $fa-font-path: "../../webfonts";
 @import "colors";
 @import "tiles";
 
+// Nicer images
+img {
+  border-radius: 5px;
+}
 
 // Set background
 html, body {

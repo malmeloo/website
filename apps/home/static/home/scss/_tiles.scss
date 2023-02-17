@@ -45,3 +45,35 @@
 .has-subtle-gradient-bg {
   background: linear-gradient(135deg, $gradient-light 0%, $gradient-dark 100%);
 }
+
+.has-green-gradient-bg {
+  background: linear-gradient(135deg, $gradient-light-green 0%, $gradient-dark-green 100%);
+}
+
+.overlay-container {
+  position: relative;
+}
+
+.overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  translate: -50% -50%;
+}
+
+.music-control {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+
+  line-height: 32px;
+  text-align: center;
+
+  cursor: pointer;
+  background-color: darkgray;
+  transition: all 0.2s;
+}
+
+.music-control:hover {
+  scale: 0.8;
+}

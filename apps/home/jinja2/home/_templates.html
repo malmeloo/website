@@ -18,18 +18,29 @@
 
 <template id="spotify-tile">
     <div class="tile is-child is-primary">
-        <p class="is-size-1">{{ pick("🐇", "🦜", "🦦", "🐓", "🐌", "🐖") }}</p>
+        <article class="media">
+            <figure class="media-left">
+                <div class="image is-64x64 overlay-container">
+                    <img src="https://bulma.io/images/placeholders/128x128.png" alt="">
+                    <div class="overlay music-control">
+                        <i class="fa-solid fa-play"></i>
+                    </div>
+                </div>
+            </figure>
 
-        <p class="title">
-            <slot name="title">About me</slot>
-        </p>
-        <br/>
-        <p class="subtitle">
-            <slot name="description">Description goes here</slot>
-        </p>
-
-        <span class="icon pin-bottom-right toggle-expand">
-            <i class="fa-solid fa-chevron-down"></i>
-        </span>
+            <div class="media-content">
+                <p class="title">
+                    Test
+                </p>
+                <p class="subtitle">
+                    Artist goes here
+                </p>
+            </div>
+        </article>
     </div>
 </template>
+
+{#Expansion#}
+{#<span class="icon pin-bottom-right toggle-expand">#}
+{#    <i class="fa-solid fa-chevron-down"></i>#}
+{#</span>#}

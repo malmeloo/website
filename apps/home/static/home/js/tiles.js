@@ -97,8 +97,13 @@ class AboutMeTile extends RootTile {
     static tileId = "about-me-tile";
 }
 
+class SpotifyTile extends RootTile {
+    static tileId = "spotify-tile";
+}
+
 
 // Register all tiles
 [
-    AboutMeTile
+    AboutMeTile,
+    SpotifyTile
 ].map(registerTile)
