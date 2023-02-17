@@ -1,3 +1,5 @@
+@import "colors";
+
 // Generic
 .tile {
   height: 100%;
@@ -9,16 +11,37 @@
 }
 
 .web-tile {
-  border: 1px solid $tile-border;
+  position: relative;
+
   border-radius: 20px;
   padding: 20px;
   margin-bottom: 1.5rem;
+  box-shadow: 0 0 4px black;
 
   transition: height 0.5s;
-
-  height: var(width);
 
   p {
     color: $tile-border;
   }
+}
+
+.toggle-expand {
+  color: $tile-border;
+  transition: rotate 0.3s;
+  cursor: pointer;
+}
+
+// Helpers
+.pin-bottom-right {
+  position: absolute;
+  right: 15px;
+  bottom: 15px;
+}
+
+.has-thin-border {
+  border: 1px solid $tile-border;
+}
+
+.has-subtle-gradient-bg {
+  background: linear-gradient(135deg, $gradient-light 0%, $gradient-dark 100%);
 }

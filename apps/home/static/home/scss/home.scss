@@ -6,6 +6,8 @@ $fa-font-path: "../../webfonts";
 @import "../../../../../lib/bulma/bulma.sass";
 @import "../../../../../lib/Font-Awesome/scss/fontawesome";
 @import "../../../../../lib/Font-Awesome/scss/solid";
+@import "../../../../../lib/Font-Awesome/scss/brands";
+@import "../../../../../lib/bulma-tooltip/src/sass/index";
 
 // Custom modules
 @import "colors";
@@ -21,3 +23,11 @@ html {
   background-color: $bg;
 }
 
+// Icon colors
+.fa-brands.fa-github {
+  color: $black
+}
+
+.fa-brands.fa-discord {
+  color: #5865F2
+}

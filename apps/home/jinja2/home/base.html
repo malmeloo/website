@@ -11,8 +11,11 @@
     {% compress css %}
         <link rel="stylesheet" type="text/x-scss" href="{{ static('home/scss/home.scss') }}"/>
     {% endcompress %}
+    {% compress js %}
+        <script src="{{ static('home/js/tiles.js') }}" defer></script>
+    {% endcompress %}
 </head>
-<body class="dark">
+<body>
 {% block body %}
 {% endblock %}
 </body>

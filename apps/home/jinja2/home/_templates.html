@@ -1,0 +1,35 @@
+<template id="about-me-tile">
+    <div class="tile is-child is-primary">
+        <p class="is-size-1">{{ pick("🐇", "🦜", "🦦", "🐓", "🐌", "🐖") }}</p>
+
+        <p class="title">
+            <slot name="title">About me</slot>
+        </p>
+        <br/>
+
+        <p class="subtitle">
+            <slot name="description">Description goes here</slot>
+        </p>
+        <p class="is-size-2">
+            <slot name="socials">Socials!</slot>
+        </p>
+    </div>
+</template>
+
+<template id="spotify-tile">
+    <div class="tile is-child is-primary">
+        <p class="is-size-1">{{ pick("🐇", "🦜", "🦦", "🐓", "🐌", "🐖") }}</p>
+
+        <p class="title">
+            <slot name="title">About me</slot>
+        </p>
+        <br/>
+        <p class="subtitle">
+            <slot name="description">Description goes here</slot>
+        </p>
+
+        <span class="icon pin-bottom-right toggle-expand">
+            <i class="fa-solid fa-chevron-down"></i>
+        </span>
+    </div>
+</template>
