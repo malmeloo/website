@@ -141,6 +141,7 @@ USE_TZ = True
 
 # Django-compress & libsass & purgecss
 COMPRESS_OUTPUT_DIR = 'compressed'
+COMPRESS_REBUILD_TIMEOUT = 1 if DEBUG else 60 * 60 * 24 * 30  # always rebuild in debug mode
 COMPRESS_PRECOMPILERS = (
     ('text/x-scss', 'django_libsass.SassCompiler'),
 )
