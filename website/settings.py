@@ -16,13 +16,16 @@ from pathlib import Path
 
 from django.core.management.utils import get_random_secret_key
 
+from .config import Config
+
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+conf = Config(BASE_DIR / 'config.ini')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
-DEBUG = True
-ALLOWED_HOSTS = []
-
+DEBUG = conf.get('server.debug', True)
+ALLOWED_HOSTS = conf.get('server.allowedHosts', [])
 
 SECRET_KEY = 'django-insecure'
 if not DEBUG:
