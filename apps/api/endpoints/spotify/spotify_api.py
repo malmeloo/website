@@ -16,7 +16,7 @@ CLIENT_SECRET = settings.CONFIG.get('spotify.clientSecret')
 API_ENDPOINT = 'https://api.spotify.com/v1'
 TOKEN_URL = 'https://accounts.spotify.com/api/token'
 AUTHORIZE_CALLBACK = 'https://accounts.spotify.com/authorize'
-SCOPES = 'user-read-email'
+SCOPES = 'user-read-email user-top-read'
 
 HEADERS = {
     'Authorization': 'Basic ' + base64.b64encode(f'{CLIENT_ID}:{CLIENT_SECRET}'.encode()).decode()
@@ -82,13 +82,10 @@ def resolve_access_token(code, redirect_uri):
             'code': code,
             'redirect_uri': redirect_uri
         })
+        r.raise_for_status()
         data = r.json()
-    except (httpx.RequestError, json.JSONDecodeError) as e:
+    except (httpx.RequestError, httpx.HTTPStatusError, json.JSONDecodeError) as e:
         print(e, file=sys.stderr)
-        return None
-
-    if r.status_code != 200:
-        print(f'Spotify error: {data}', file=sys.stderr)
         return None
 
     return _make_token(**data)
@@ -110,13 +107,24 @@ def get_user_profile(token: OAuthToken):
         r = client.get(f'{API_ENDPOINT}/me', headers={
             'Authorization': f'Bearer {token.access_token}'
         })
+        r.raise_for_status()
         data = r.json()
-    except (httpx.RequestError, json.JSONDecodeError) as e:
+    except (httpx.RequestError, httpx.HTTPStatusError, json.JSONDecodeError) as e:
         print(e, file=sys.stderr)
         return None
 
-    if r.status_code != 200:
-        print(f'Spotify error: {data}', file=sys.stderr)
+    return data
+
+
+def get_top_songs(token: OAuthToken):
+    try:
+        r = client.get(f'{API_ENDPOINT}/me/top/tracks?time_range=short_term', headers={
+            'Authorization': f'Bearer {token.access_token}'
+        })
+        r.raise_for_status()
+        data = r.json()
+    except (httpx.RequestError, httpx.HTTPStatusError, json.JSONDecodeError) as e:
+        print(e, file=sys.stderr)
         return None
 
     return data

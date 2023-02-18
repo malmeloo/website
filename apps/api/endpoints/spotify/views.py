@@ -1,5 +1,5 @@
 from django.conf import settings
-from django.http import HttpRequest, HttpResponse
+from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import redirect
 from django.urls import reverse
 
@@ -57,3 +57,31 @@ def callback(request: HttpRequest):
 
     token.save()
     return HttpResponse(f'Done! Logged in as: {profile["email"]}')
+
+
+def get_top_songs(request: HttpRequest):
+    token = spotify_api.get_access_token()
+    if token is None:
+        # 503 service unavailable
+        return JsonResponse({'error': 'account unlinked, ask administrator to log in'}, status=503)
+
+    songs = spotify_api.get_top_songs(token)
+    if songs is None:
+        # 503 service unavailable
+        return JsonResponse({'error': 'error while communicating with spotify'}, status=503)
+
+    tracks = []
+    for item in songs.get('items', []):
+        artists = [{
+            'name': artist.get('name', '<unknown>'),
+            'url': artist.get('external_urls', {}).get('spotify', None)
+        } for artist in item.get('artists', [])]
+
+        tracks.append({
+            'name': item.get('name', '<unknown>'),
+            'url': item.get('external_urls', {}).get('spotify', None),
+            'artists': artists,
+            'preview_url': item.get('preview_url', None)
+        })
+
+    return JsonResponse({'tracks': tracks})
