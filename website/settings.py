@@ -19,13 +19,12 @@ from django.core.management.utils import get_random_secret_key
 from .config import Config
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-
-conf = Config(BASE_DIR / 'config.ini')
+CONFIG = Config(BASE_DIR / 'config.ini')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
-DEBUG = conf.get('server.debug', True)
-ALLOWED_HOSTS = conf.get('server.allowedHosts', [])
+DEBUG = CONFIG.get('server.debug', True)
+ALLOWED_HOSTS = CONFIG.get('server.allowedHosts', [])
 
 SECRET_KEY = 'django-insecure'
 if not DEBUG:
@@ -51,7 +50,8 @@ INSTALLED_APPS = [
 
     'compressor',
 
-    'apps.home'
+    'apps.home',
+    'apps.api'
 ]
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
