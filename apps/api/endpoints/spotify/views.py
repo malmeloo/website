@@ -21,6 +21,9 @@ def login(request: HttpRequest):
 
 
 def callback(request: HttpRequest):
+    if not spotify_api.can_operate():
+        return HttpResponse('Error: clientId or clientSecret is missing, update config!', status=500)
+
     state = request.GET.get('state')
     if state is None or not SpotifyStateCode.verify(state):
         # 400 bad request
@@ -52,4 +55,5 @@ def callback(request: HttpRequest):
         # 403 forbidden
         return HttpResponse(f'Error: account is not in the allowlist (logged in as {email})', status=403)
 
+    token.save()
     return HttpResponse(f'Done! Logged in as: {profile["email"]}')

@@ -29,7 +29,7 @@ def can_operate():
     return not (CLIENT_ID is None or CLIENT_SECRET is None)
 
 
-def _save_token(**data):
+def _make_token(**data):
     token = OAuthToken(
         service='spotify',
         access_token=data.get('access_token'),
@@ -57,7 +57,10 @@ def _refresh_token(token: OAuthToken):
         print(f'Spotify error: {data}', file=sys.stderr)
         return None
 
-    return _save_token(**data)
+    token = _make_token(**data)
+    token.save()
+
+    return token
 
 
 def get_callback_url(redirect_uri, state_code):
@@ -88,7 +91,7 @@ def resolve_access_token(code, redirect_uri):
         print(f'Spotify error: {data}', file=sys.stderr)
         return None
 
-    return _save_token(**data)
+    return _make_token(**data)
 
 
 def get_access_token():
