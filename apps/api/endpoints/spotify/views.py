@@ -76,10 +76,12 @@ def get_top_songs(request: HttpRequest):
             'name': artist.get('name', '<unknown>'),
             'url': artist.get('external_urls', {}).get('spotify', None)
         } for artist in item.get('artists', [])]
+        images = item.get('album', {}).get('images', [])
 
         tracks.append({
             'name': item.get('name', '<unknown>'),
             'url': item.get('external_urls', {}).get('spotify', None),
+            'cover': images[0].get('url', None) if images else None,
             'artists': artists,
             'preview_url': item.get('preview_url', None)
         })
