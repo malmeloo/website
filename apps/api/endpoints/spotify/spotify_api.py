@@ -44,16 +44,13 @@ def _request(method, url, auth_token=None, data=None):
 
 
 def _make_token(**data):
-    token = OAuthToken(
+    return OAuthToken(
         service='spotify',
         access_token=data.get('access_token'),
         refresh_token=data.get('refresh_token'),
         scope=data.get('scope'),
         expires_at=timezone.now() + timedelta(seconds=data.get('expires_in', 0))
     )
-    token.save()
-
-    return token
 
 
 def _refresh_token(token: OAuthToken):
@@ -64,10 +61,11 @@ def _refresh_token(token: OAuthToken):
     if data is None:
         return None
 
-    token = _make_token(**data)
-    token.save()
+    new_token = _make_token(**data)
+    new_token.refresh_token = token.refresh_token
+    new_token.save()
 
-    return token
+    return new_token
 
 
 def get_callback_url(redirect_uri, state_code):
@@ -91,7 +89,9 @@ def resolve_access_token(code, redirect_uri):
     if data is None:
         return None
 
-    return _make_token(**data)
+    token = _make_token(**data)
+    token.save()
+    return token
 
 
 def get_access_token():
