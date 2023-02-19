@@ -22,11 +22,25 @@ HEADERS = {
     'Authorization': 'Basic ' + base64.b64encode(f'{CLIENT_ID}:{CLIENT_SECRET}'.encode()).decode()
 }
 
-client = httpx.Client(headers=HEADERS)
+client = httpx.Client()
 
 
 def can_operate():
     return not (CLIENT_ID is None or CLIENT_SECRET is None)
+
+
+def _request(method, url, auth_token=None, data=None):
+    headers = {
+        'Authorization': f'Bearer {auth_token}'
+    } if auth_token else HEADERS
+
+    try:
+        r = client.request(method, url, headers=headers, data=data)
+        r.raise_for_status()
+        return r.json()
+    except (httpx.RequestError, httpx.HTTPStatusError, json.JSONDecodeError) as e:
+        print(e, file=sys.stderr)
+        return None
 
 
 def _make_token(**data):
@@ -43,18 +57,11 @@ def _make_token(**data):
 
 
 def _refresh_token(token: OAuthToken):
-    try:
-        r = client.post(TOKEN_URL, data={
-            'grant_type': 'refresh_token',
-            'refresh_token': token.refresh_token
-        })
-        data = r.json()
-    except (httpx.RequestError, json.JSONDecodeError) as e:
-        print(e, file=sys.stderr)
-        return None
-
-    if r.status_code != 200:
-        print(f'Spotify error: {data}', file=sys.stderr)
+    data = _request('POST', TOKEN_URL, data={
+        'grant_type': 'refresh_token',
+        'refresh_token': token.refresh_token
+    })
+    if data is None:
         return None
 
     token = _make_token(**data)
@@ -76,16 +83,12 @@ def get_callback_url(redirect_uri, state_code):
 
 
 def resolve_access_token(code, redirect_uri):
-    try:
-        r = client.post(TOKEN_URL, data={
-            'grant_type': 'authorization_code',
-            'code': code,
-            'redirect_uri': redirect_uri
-        })
-        r.raise_for_status()
-        data = r.json()
-    except (httpx.RequestError, httpx.HTTPStatusError, json.JSONDecodeError) as e:
-        print(e, file=sys.stderr)
+    data = _request('POST', TOKEN_URL, data={
+        'grant_type': 'authorization_code',
+        'code': code,
+        'redirect_uri': redirect_uri
+    })
+    if data is None:
         return None
 
     return _make_token(**data)
@@ -103,28 +106,10 @@ def get_access_token():
 
 
 def get_user_profile(token: OAuthToken):
-    try:
-        r = client.get(f'{API_ENDPOINT}/me', headers={
-            'Authorization': f'Bearer {token.access_token}'
-        })
-        r.raise_for_status()
-        data = r.json()
-    except (httpx.RequestError, httpx.HTTPStatusError, json.JSONDecodeError) as e:
-        print(e, file=sys.stderr)
-        return None
-
-    return data
+    return _request('GET', API_ENDPOINT + '/me',
+                    auth_token=token.access_token)
 
 
 def get_top_songs(token: OAuthToken):
-    try:
-        r = client.get(f'{API_ENDPOINT}/me/top/tracks?time_range=short_term', headers={
-            'Authorization': f'Bearer {token.access_token}'
-        })
-        r.raise_for_status()
-        data = r.json()
-    except (httpx.RequestError, httpx.HTTPStatusError, json.JSONDecodeError) as e:
-        print(e, file=sys.stderr)
-        return None
-
-    return data
+    return _request('GET', API_ENDPOINT + '/me/top/tracks?time_range=short_term',
+                    auth_token=token.access_token)
