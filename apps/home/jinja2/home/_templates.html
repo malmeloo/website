@@ -18,29 +18,33 @@
 
 <template id="spotify-tile">
     <div class="tile is-child is-primary">
-        <article class="media">
-            <figure class="media-left">
-                <div class="image is-64x64 overlay-container">
-                    <img src="https://bulma.io/images/placeholders/128x128.png" alt="">
-                    <div class="overlay music-control">
-                        <i class="fa-solid fa-play"></i>
+        <div class="track-list">
+            <article class="media spotify-track">
+                <figure class="media-left">
+                    <div class="image is-64x64 overlay-container">
+                        <img src="" alt="">
+                        <div class="overlay music-control">
+                            <i class="fa-solid fa-spinner spinning"></i>
+                        </div>
                     </div>
-                </div>
-            </figure>
+                </figure>
 
-            <div class="media-content">
-                <p class="title">
-                    Test
-                </p>
-                <p class="subtitle">
-                    Artist goes here
-                </p>
-            </div>
-        </article>
+                <div class="media-content">
+                    <p class="title is-4">
+                        <a>Loading...</a>
+                    </p>
+                    <p class="subtitle is-6">
+                        <a></a>
+                    </p>
+                </div>
+            </article>
+        </div>
+
+        <span class="icon pin-bottom-right toggle-expand">
+            <i class="fa-solid fa-chevron-down"></i>
+        </span>
+        <a class="icon pin-top-right icon" style="font-size: 1.5em; color: #1ED760" href="https://spotify.com">
+            <i class="fa-brands fa-spotify"></i>
+        </a>
     </div>
 </template>
-
-{#Expansion#}
-{#<span class="icon pin-bottom-right toggle-expand">#}
-{#    <i class="fa-solid fa-chevron-down"></i>#}
-{#</span>#}

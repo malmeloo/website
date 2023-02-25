@@ -132,6 +132,8 @@ USE_TZ = True
 # https://django-compressor.readthedocs.io/en/3.1/
 # https://github.com/torchbox/django-libsass
 COMPRESS_ENABLED = True
+PURGECSS_SAFELIST = ['spinning', 'fa-spinner', 'fa-play', 'fa-pause']
+
 COMPRESS_OUTPUT_DIR = 'compressed'
 COMPRESS_REBUILD_TIMEOUT = 1 if DEBUG else 60 * 60 * 24 * 30  # always rebuild in debug mode
 COMPRESS_PRECOMPILERS = (

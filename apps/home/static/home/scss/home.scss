@@ -12,11 +12,6 @@ $fa-font-path: "../../webfonts";
 @import "colors";
 @import "tiles";
 
-// Nicer images
-img {
-  border-radius: 5px;
-}
-
 // Set background
 html, body {
   min-height: 100%;
@@ -33,4 +28,18 @@ html {
 
 .fa-brands.fa-discord {
   color: #5865F2
+}
+
+// Animations
+.spinning {
+  animation: spin 800ms infinite linear;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }

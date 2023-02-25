@@ -2,6 +2,7 @@ import glob
 import os.path
 
 from compressor.filters import CompilerFilter
+from django.conf import settings
 from django.template.loaders.app_directories import get_app_template_dirs
 
 
@@ -17,8 +18,9 @@ def get_all_templates():
 
 
 class PurgeCSSFilter(CompilerFilter):
-    command = 'purgecss --css {infile} -o {outfile} --content {content}'
+    command = 'purgecss --css {infile} -o {outfile} --safelist {safelist} --content {content}'
 
     options = (
         ('content', ' '.join(get_all_templates())),
+        ('safelist', ' '.join(settings.PURGECSS_SAFELIST))
     )
