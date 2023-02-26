@@ -116,14 +116,20 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
 
+# Static files (CSS, JavaScript, Images)
+# https://docs.djangoproject.com/en/4.1/howto/static-files/
+STATIC_URL = 'static/'
+STATIC_ROOT = BASE_DIR / 'static'
+
 # Django-compress + libsass + purgecss
 # https://django-compressor.readthedocs.io/en/3.1/
 # https://github.com/torchbox/django-libsass
 COMPRESS_ENABLED = True
 PURGECSS_SAFELIST = ['spinning', 'fa-spinner', 'fa-play', 'fa-pause']
 
-# COMPRESS_OFFLINE = True
+COMPRESS_OFFLINE = not CONFIG.get('server.debug', True)
 COMPRESS_OUTPUT_DIR = 'compressed'
+LIBSASS_ADDITIONAL_INCLUDE_PATHS = [str(STATIC_ROOT)]
 COMPRESS_REBUILD_TIMEOUT = 1 if DEBUG else 60 * 60 * 24 * 30  # always rebuild in debug mode
 COMPRESS_PRECOMPILERS = (
     ('text/x-scss', 'django_libsass.SassCompiler'),
@@ -143,11 +149,6 @@ STATICFILES_FINDERS = (
     'compressor.finders.CompressorFinder',
 )
 LIBSASS_OUTPUT_STYLE = 'compressed'
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/4.1/howto/static-files/
-STATIC_URL = 'static/'
-STATIC_ROOT = BASE_DIR / 'static'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field

@@ -226,6 +226,7 @@ dmypy.json
 cython_debug/
 
 # project specific
-!/lib/
-/static/compressed/
+/static/*/
+!/static/lib/
+
 secret.key

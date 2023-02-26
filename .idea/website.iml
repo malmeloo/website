@@ -16,6 +16,8 @@
     <content url="file://$MODULE_DIR$">
       <excludeFolder url="file://$MODULE_DIR$/venv" />
       <excludeFolder url="file://$MODULE_DIR$/static/compressed" />
+      <excludeFolder url="file://$MODULE_DIR$/static/home" />
+      <excludeFolder url="file://$MODULE_DIR$/static/admin" />
     </content>
     <orderEntry type="jdk" jdkName="Poetry (website)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
