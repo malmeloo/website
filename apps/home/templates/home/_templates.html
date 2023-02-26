@@ -1,6 +1,8 @@
+{% load utils %}
+
 <template id="about-me-tile">
     <div class="tile is-child is-primary">
-        <p class="is-size-1">{{ pick("🐇", "🦜", "🦦", "🐓", "🐌", "🐖") }}</p>
+        <p class="is-size-1">{% choice "🐇" "🦜" "🦦" "🐓" "🐌" "🐖" %}</p>
 
         <p class="title">
             <slot name="title">About me</slot>

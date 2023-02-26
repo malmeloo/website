@@ -9,7 +9,7 @@ from django.template.loaders.app_directories import get_app_template_dirs
 def get_all_templates():
     templates = []
 
-    dirs = get_app_template_dirs('jinja2')
+    dirs = get_app_template_dirs('templates')
     for d in dirs:
         for file in glob.glob(os.path.join(d, '**/*.html')):
             templates.append(file)

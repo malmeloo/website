@@ -38,7 +38,6 @@ if not DEBUG:
             f.write(SECRET_KEY)
         print('KEY: Generated and saved to disk')
 
-
 # Application definition
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -77,19 +76,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-            ],
-        },
-    },
-    {
-        'BACKEND': 'django.template.backends.jinja2.Jinja2',
-        'DIRS': [],
-        'APP_DIRS': True,
-        'OPTIONS': {
-            'environment': 'website.jinja2.environment',
-            'extensions': [
-                'compressor.contrib.jinja2ext.CompressorExtension'
             ]
-        }
+        },
     },
 ]
 
@@ -134,6 +122,7 @@ USE_TZ = True
 COMPRESS_ENABLED = True
 PURGECSS_SAFELIST = ['spinning', 'fa-spinner', 'fa-play', 'fa-pause']
 
+# COMPRESS_OFFLINE = True
 COMPRESS_OUTPUT_DIR = 'compressed'
 COMPRESS_REBUILD_TIMEOUT = 1 if DEBUG else 60 * 60 * 24 * 30  # always rebuild in debug mode
 COMPRESS_PRECOMPILERS = (
