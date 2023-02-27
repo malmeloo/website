@@ -1,0 +1,13 @@
+# Unnecessary files
+README.md
+config.ini
+.gitignore
+.gitmodules
+secret.key
+db.sqlite3
+__pycache__/
+
+# Large bois
+.git/
+static/lib/bulma/docs
+static/lib/Font-Awesome/js-packages
