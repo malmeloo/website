@@ -92,8 +92,8 @@ class SpotifyTile extends RootTile {
     static tileId = "spotify-tile";
     static maxTracks = 5;
 
-    collapsedHeight = 0;
-    expandedHeight = 0;
+    collapsedHeight = this.clientHeight;
+    expandedHeight = this.clientHeight;
 
     tracks = [];
     trackTemplate = this.querySelector(".spotify-track");
