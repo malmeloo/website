@@ -19,4 +19,5 @@ RUN ln -sf /dev/stdout /var/log/nginx/access.log && \
     python3 manage.py collectstatic --no-input && \
     python3 manage.py compress --force
 
-ENTRYPOINT ["/bin/bash", "start.sh"]
+STOPSIGNAL SIGINT
+ENTRYPOINT ["./start.sh"]
