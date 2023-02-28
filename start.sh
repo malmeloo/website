@@ -27,4 +27,4 @@ gunicorn website.wsgi --bind 0.0.0.0:8081 --workers 4 &
 sleep 2
 
 echo "- Starting Nginx"
-nginx -g "daemon off;"
+exec nginx -g "daemon off;"
