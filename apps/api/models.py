@@ -1,6 +1,9 @@
-from django.db import models
+import random
+import string
+from datetime import timedelta
 
-from .endpoints.spotify.models import SpotifyStateCode
+from django.db import models
+from django.utils import timezone
 
 
 class OAuthToken(models.Model):
@@ -9,3 +12,42 @@ class OAuthToken(models.Model):
     refresh_token = models.CharField(max_length=255)
     scope = models.CharField(max_length=100)
     expires_at = models.DateTimeField()
+
+
+class TempStateCode(models.Model):
+    domain = models.CharField(max_length=32)
+    state_code = models.CharField(max_length=16)
+    expires_at = models.DateTimeField()
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['domain', 'state_code'], name='unique_domain_state')
+        ]
+
+    @classmethod
+    def _clean(cls):
+        cls.objects.filter(expires_at__lt=timezone.now()).delete()
+
+    @classmethod
+    def generate(cls, domain: str, expires_in: int = 3600):
+        cls._clean()
+
+        code = ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(16))
+        state = cls(
+            domain=domain,
+            state_code=code,
+            expires_at=timezone.now() + timedelta(seconds=expires_in)
+        )
+        state.save()
+
+        return state
+
+    @classmethod
+    def verify(cls, domain: str, code: str):
+        cls._clean()
+
+        codes = cls.objects.filter(domain=domain, state_code=code)
+        try:
+            return codes.exists()
+        finally:
+            codes.delete()

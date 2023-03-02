@@ -3,10 +3,10 @@ from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import redirect
 from django.urls import reverse
 
-from apps.api.models import SpotifyStateCode
+from apps.api.models import TempStateCode
 from . import spotify_api
 
-ALLOWED_EMAILS = settings.CONFIG.get('spotify.allowedEmails')
+ALLOWED_EMAILS = settings.CONFIG.get('spotify.allowedEmails', [])
 
 
 def login(request: HttpRequest):
@@ -15,7 +15,7 @@ def login(request: HttpRequest):
 
     url = spotify_api.get_callback_url(
         request.build_absolute_uri(reverse(callback)),
-        SpotifyStateCode.generate().state_code
+        TempStateCode.generate('spotify').state_code
     )
     return redirect(url)
 
@@ -25,7 +25,7 @@ def callback(request: HttpRequest):
         return HttpResponse('Error: clientId or clientSecret is missing, update config!', status=500)
 
     state = request.GET.get('state')
-    if state is None or not SpotifyStateCode.verify(state):
+    if state is None or not TempStateCode.verify('spotify', state):
         # 400 bad request
         return HttpResponse('Error: missing or invalid state parameter', status=400)
 

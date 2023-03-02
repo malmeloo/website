@@ -89,9 +89,7 @@ def resolve_access_token(code, redirect_uri):
     if data is None:
         return None
 
-    token = _make_token(**data)
-    token.save()
-    return token
+    return _make_token(**data)
 
 
 def get_access_token():
