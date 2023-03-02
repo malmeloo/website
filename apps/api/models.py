@@ -13,6 +13,9 @@ class OAuthToken(models.Model):
     scope = models.CharField(max_length=100)
     expires_at = models.DateTimeField()
 
+    def __str__(self):
+        return self.service
+
 
 class TempStateCode(models.Model):
     domain = models.CharField(max_length=32)
@@ -23,6 +26,9 @@ class TempStateCode(models.Model):
         constraints = [
             models.UniqueConstraint(fields=['domain', 'state_code'], name='unique_domain_state')
         ]
+
+    def __str__(self):
+        return f'{self.domain} - {self.state_code}'
 
     @classmethod
     def _clean(cls):
