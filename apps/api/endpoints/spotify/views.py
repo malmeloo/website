@@ -40,7 +40,7 @@ def callback(request: HttpRequest):
         return HttpResponse('Error: missing code parameter', status=400)
 
     # exchange code for token
-    token = spotify_api.resolve_access_token(code, request.build_absolute_uri().split('?')[0])
+    token = spotify_api.resolve_code(code, request.build_absolute_uri().split('?')[0])
     if token is None:
         # 500 internal server error
         return HttpResponse('Error while retrieving or decoding authentication token', status=500)
