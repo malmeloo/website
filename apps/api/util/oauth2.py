@@ -61,14 +61,15 @@ class OAuth2Provider:
         )
         return token, data
 
-    def _refresh_token(self, token: OAuthToken, extra=None):
+    def _refresh_token(self, token: OAuthToken, extra_headers=None):
         payload = {
             'grant_type': 'refresh_token',
+            'client_id': self.client_id,
+            'client_secret': self.client_secret,
             'refresh_token': token.refresh_token
         }
-        payload.update(extra or {})
 
-        data = request('POST', self._token_endpoint, data=payload)
+        data = request('POST', self._token_endpoint, data=payload, extra_headers=extra_headers)
         if data is None:
             return None
 
@@ -89,7 +90,7 @@ class OAuth2Provider:
 
         return f'{self._auth_endpoint}?{urlencode(data)}'
 
-    def resolve_code(self, code: str, auth_token=None, extra_headers=None):
+    def resolve_code(self, code: str, extra_headers=None):
         payload = {
             'grant_type': 'authorization_code',
             'redirect_uri': self._redirect_uri,
@@ -98,18 +99,18 @@ class OAuth2Provider:
             'code': code
         }
 
-        data = request('POST', self._token_endpoint, data=payload, auth_token=auth_token, extra_headers=extra_headers)
+        data = request('POST', self._token_endpoint, data=payload, extra_headers=extra_headers)
         if data is None:
             return None
 
         return self._consume_token(**data)
 
-    def get_access_token(self, refresh_extra=None):
+    def get_access_token(self, extra_headers=None):
         try:
-            token = OAuthToken.objects.get(service='spotify')
+            token = OAuthToken.objects.get(service=self._provider)
         except OAuthToken.DoesNotExist:
             return None
 
         if token.expires_at < timezone.now():  # refresh token
-            token = self._refresh_token(token, refresh_extra)
+            token = self._refresh_token(token, extra_headers)
         return token
