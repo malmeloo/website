@@ -1,5 +1,6 @@
 from django.conf import settings
-from django.http import HttpRequest, HttpResponse
+from django.contrib.admin.views.decorators import staff_member_required
+from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import reverse, redirect
 
 from apps.api.models import TempStateCode
@@ -46,3 +47,32 @@ def callback(request: HttpRequest):
     token.save()
 
     return HttpResponse(f'Done! Logged in as {email}')
+
+
+@staff_member_required
+def get_albums(request: HttpRequest):
+    token = gphotos_api.get_access_token()
+    if token is None:
+        # 503 service unavailable
+        return JsonResponse({'error': 'account unlinked, ask administrator to log in'}, status=503)
+
+    albums = gphotos_api.get_albums(token)
+    if not albums:
+        # 503 service unavailable
+        return JsonResponse({'error': 'could not get image, try again later'}, status=503)
+
+    return JsonResponse({'albums': albums})
+
+
+def get_image(request: HttpRequest):
+    token = gphotos_api.get_access_token()
+    if token is None:
+        # 503 service unavailable
+        return JsonResponse({'error': 'account unlinked, ask administrator to log in'}, status=503)
+
+    img = gphotos_api.get_image(token, settings.CONFIG.get('gphotos.albumId'))
+    if not img:
+        # 503 service unavailable
+        return JsonResponse({'error': 'could not get image, try again later'}, status=503)
+
+    return JsonResponse({'images': img})
