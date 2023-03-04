@@ -305,6 +305,18 @@ files = [
 ]
 
 [[package]]
+name = "pymemcache"
+version = "4.0.0"
+description = "A comprehensive, fast, pure Python memcached client"
+category = "main"
+optional = false
+python-versions = ">=3.7"
+files = [
+    { file = "pymemcache-4.0.0-py2.py3-none-any.whl", hash = "sha256:f507bc20e0dc8d562f8df9d872107a278df049fa496805c1431b926f3ddd0eab" },
+    { file = "pymemcache-4.0.0.tar.gz", hash = "sha256:27bf9bd1bbc1e20f83633208620d56de50f14185055e49504f4f5e94e94aff94" },
+]
+
+[[package]]
 name = "rcssmin"
 version = "1.1.1"
 description = "CSS Minifier"
@@ -444,4 +456,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "6e39ce25291f739fae69b48fb66eb542999b20cded2c58b77b1890eb678f36ce"
+content-hash = "f674ff7bfe4271c3b521893eda6d5203ce9b70f9149cea5b870fd44db3e6146a"
