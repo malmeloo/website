@@ -16,7 +16,18 @@ gunicorn = "^20.1.0"
 psycopg2-binary = "^2.9.5"
 pymemcache = "^4.0.0"
 
+[tool.poetry.group.dev.dependencies]
+mypy = "^1.0.1"
+django-stubs = { extras = ["compatible-mypy"], version = "^1.15.0" }
+django-stubs-ext = "^0.7.0"
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+
+[tool.mypy]
+plugins = ["mypy_django_plugin.main"]
+
+[tool.django-stubs]
+django_settings_module = "website.settings"

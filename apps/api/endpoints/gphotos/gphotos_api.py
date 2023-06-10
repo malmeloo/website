@@ -19,32 +19,34 @@ provider = OAuth2Provider(
 )
 
 
-def can_operate():
+def can_operate() -> bool:
     return provider.can_operate
 
 
 ##############################
 # Getting tokens / Auth flow #
 ##############################
-def get_callback_url(redirect_uri, state_code):
+def get_callback_url(redirect_uri: str, state_code: str) -> str:
     provider.set_redirect_uri(redirect_uri)
     return provider.create_auth_url(SCOPES, extra={'state': state_code, 'access_type': 'offline'})
 
 
-def resolve_code(code, redirect_uri):
+def resolve_code(code: str, redirect_uri: str) -> tuple[OAuthToken | None, str | None]:
     provider.set_redirect_uri(redirect_uri)
-    token, extra = provider.resolve_code(code)
-    return token, extra.get('id_token', None)
+    data = provider.resolve_code(code)
+    token = data[0] if data else None
+    extra = data[1].get('id_token', None) if data else None
+    return token, extra
 
 
-def get_access_token():
+def get_access_token() -> OAuthToken | None:
     return provider.get_access_token()
 
 
 #########
 # Utils #
 #########
-def get_email(id_token: str):
+def get_email(id_token: str) -> str | None:
     try:
         part = b64decode(id_token.split('.')[1] + '===')
         data = json.loads(part)
@@ -54,15 +56,15 @@ def get_email(id_token: str):
     return data.get('email', None)
 
 
-def _request(method: str, url: str, token: OAuthToken, inner_key: str, data: dict = None):
+def _request(method: str, url: str, token: OAuthToken, inner_key: str, data: dict | None = None) -> list:
     """Makes an authenticated request. Automatically resolves pagination."""
-    data = data or {}
+    req_data = data or {}
     result = []
 
-    def request_once(page_token=None):
+    def request_once(page_token: str | None = None):
         if page_token is not None:
-            data['pageToken'] = page_token
-        resp = request(method, url, auth_token=token.access_token, data=data)
+            req_data['pageToken'] = page_token
+        resp = request(method, url, auth_token=token.access_token, data=req_data)
         if resp is None:
             return
 

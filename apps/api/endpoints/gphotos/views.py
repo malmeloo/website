@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.contrib.admin.views.decorators import staff_member_required
 from django.http import HttpRequest, HttpResponse, JsonResponse
-from django.shortcuts import reverse, redirect
+from django.shortcuts import reverse, redirect  # type: ignore
 
 from apps.api.models import TempStateCode
 from . import gphotos_api

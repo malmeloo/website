@@ -13,7 +13,7 @@ class OAuthToken(models.Model):
     scope = models.CharField(max_length=100)
     expires_at = models.DateTimeField()
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.service
 
 
@@ -27,15 +27,15 @@ class TempStateCode(models.Model):
             models.UniqueConstraint(fields=['domain', 'state_code'], name='unique_domain_state')
         ]
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f'{self.domain} - {self.state_code}'
 
     @classmethod
-    def _clean(cls):
+    def _clean(cls) -> None:
         cls.objects.filter(expires_at__lt=timezone.now()).delete()
 
     @classmethod
-    def generate(cls, domain: str, expires_in: int = 3600):
+    def generate(cls, domain: str, expires_in: int = 3600) -> 'TempStateCode':
         cls._clean()
 
         code = ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(16))
@@ -49,7 +49,7 @@ class TempStateCode(models.Model):
         return state
 
     @classmethod
-    def verify(cls, domain: str, code: str):
+    def verify(cls, domain: str, code: str) -> bool:
         cls._clean()
 
         codes = cls.objects.filter(domain=domain, state_code=code)

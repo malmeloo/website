@@ -4,6 +4,5 @@
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/static/lib/Font-Awesome" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/static/lib/bulma" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/test/purgecss" vcs="Git" />
   </component>
 </project>

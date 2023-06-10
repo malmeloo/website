@@ -1,12 +1,12 @@
 import glob
 import os.path
 
-from compressor.filters import CompilerFilter
+from compressor.filters import CompilerFilter  # type: ignore
 from django.conf import settings
-from django.template.loaders.app_directories import get_app_template_dirs
+from django.template.loaders.app_directories import get_app_template_dirs  # type: ignore
 
 
-def get_all_templates():
+def get_all_templates() -> list[str]:
     templates = []
 
     dirs = get_app_template_dirs('templates')
@@ -17,7 +17,7 @@ def get_all_templates():
     return templates
 
 
-class PurgeCSSFilter(CompilerFilter):
+class PurgeCSSFilter(CompilerFilter):  # type: ignore
     command = 'purgecss --css {infile} -o {outfile} --safelist {safelist} --content {content}'
 
     options = (

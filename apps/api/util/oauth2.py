@@ -2,6 +2,7 @@ import json
 import sys
 import traceback
 from datetime import timedelta
+from typing import Any
 from urllib.parse import urlencode
 
 import httpx
@@ -12,7 +13,10 @@ from apps.api.models import OAuthToken
 client = httpx.Client()
 
 
-def request(method, url, auth_token=None, data=None, extra_headers=None):
+def request(method: str, url: str,
+            auth_token: str | None = None,
+            data: dict[str, Any] | None = None,
+            extra_headers: dict[str, str] | None = None) -> Any:
     headers = {
         'Authorization': f'Bearer {auth_token}'
     }
@@ -34,24 +38,28 @@ def request(method, url, auth_token=None, data=None, extra_headers=None):
 
 
 class OAuth2Provider:
-    def __init__(self, provider, auth_endpoint, token_endpoint, client_id, client_secret):
+    def __init__(self, provider: str,
+                 auth_endpoint: str,
+                 token_endpoint: str,
+                 client_id: str,
+                 client_secret: str):
         self._provider = provider
 
         self._auth_endpoint = auth_endpoint
         self._token_endpoint = token_endpoint
-        self._redirect_uri = None
+        self._redirect_uri: str | None = None
 
         self.client_id = client_id
         self.client_secret = client_secret
 
     @property
-    def can_operate(self):
+    def can_operate(self) -> bool:
         return not (self.client_id is None or self.client_secret is None)
 
-    def set_redirect_uri(self, uri):
+    def set_redirect_uri(self, uri: str) -> None:
         self._redirect_uri = uri
 
-    def _consume_token(self, **data):
+    def _consume_token(self, **data: Any) -> tuple[OAuthToken, dict[str, Any]]:
         token = OAuthToken(
             service=self._provider,
             access_token=data.pop('access_token'),
@@ -61,7 +69,7 @@ class OAuth2Provider:
         )
         return token, data
 
-    def _refresh_token(self, token: OAuthToken, extra_headers=None):
+    def _refresh_token(self, token: OAuthToken, extra_headers: dict[str, str] | None = None) -> OAuthToken | None:
         payload = {
             'grant_type': 'refresh_token',
             'client_id': self.client_id,
@@ -79,7 +87,7 @@ class OAuth2Provider:
 
         return new_token
 
-    def create_auth_url(self, scopes: list[str], extra=None):
+    def create_auth_url(self, scopes: list[str], extra: dict[str, Any] | None = None) -> str:
         data = {
             'response_type': 'code',
             'client_id': self.client_id,
@@ -90,7 +98,10 @@ class OAuth2Provider:
 
         return f'{self._auth_endpoint}?{urlencode(data)}'
 
-    def resolve_code(self, code: str, extra_headers=None):
+    def resolve_code(self,
+                     code: str,
+                     extra_headers: dict[str, str] | None = None
+                     ) -> tuple[OAuthToken, dict[str, Any]] | None:
         payload = {
             'grant_type': 'authorization_code',
             'redirect_uri': self._redirect_uri,
@@ -105,12 +116,12 @@ class OAuth2Provider:
 
         return self._consume_token(**data)
 
-    def get_access_token(self, extra_headers=None):
+    def get_access_token(self, extra_headers: dict[str, str] | None = None) -> OAuthToken | None:
         try:
             token = OAuthToken.objects.get(service=self._provider)
         except OAuthToken.DoesNotExist:
             return None
 
         if token.expires_at < timezone.now():  # refresh token
-            token = self._refresh_token(token, extra_headers)
+            return self._refresh_token(token, extra_headers)
         return token

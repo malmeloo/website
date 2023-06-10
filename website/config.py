@@ -1,11 +1,10 @@
 import configparser
 import json
-from abc import abstractmethod
 from pathlib import Path
-from typing import Union
+from typing import Union, Optional, Any
 
 
-def _parse(inp: str):
+def _parse(inp: str) -> Any:
     if not inp:  # empty, so treat as string
         return inp
 
@@ -18,46 +17,25 @@ def _parse(inp: str):
     return inp
 
 
-class ConfigLike:
-    def get(self, name, default=None):
-        try:
-            return self.__getitem__(name)
-        except KeyError:
-            return default
-
-    @abstractmethod
-    def __getitem__(self, item):
-        ...
-
-
-class ConfigView(ConfigLike):
-    def __init__(self, parent: ConfigLike, prefix: str):
-        self._parent = parent
-        self._prefix = prefix
-
-    def __getitem__(self, item):
-        return self._parent[f'{self._prefix}.{item}']
-
-    def __repr__(self):
-        return f'ConfigView(prefix="{self._prefix}")'
-
-
-class Config(ConfigLike):
+class Config:
     def __init__(self, path: Union[str, Path]):
         self._path = path
 
         self._conf = configparser.ConfigParser()
         self._conf.read(path)
 
-    def __getitem__(self, item):
-        if item in self._conf:  # is a section
-            return ConfigView(self, item)
+    def get(self, name: str, default: Optional[Any] = None) -> Any:
+        try:
+            return self.__getitem__(name)
+        except KeyError:
+            return default
 
+    def __getitem__(self, item: str) -> Any:
         section, key = item.rsplit('.', 1)
         if section not in self._conf:
             raise KeyError(f'Unknown section: "{section}"')
 
         return _parse(self._conf[section][key])
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f'Config(path="{self._path}")'
