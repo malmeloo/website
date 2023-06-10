@@ -2,7 +2,7 @@ FROM node:18-slim AS purgecss-builder
 
 RUN apt-get update && apt-get upgrade -y && \
     apt-get install -y git && \
-    npm install -g lerna typescript ts-node pkg && \
+    npm install -g lerna@^6.1.0 typescript ts-node pkg && \
     cd /root && git clone https://github.com/FullHuman/purgecss
 WORKDIR /root/purgecss/packages/purgecss
 
