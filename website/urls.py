@@ -18,8 +18,11 @@ from django.urls import include, path
 
 from apps.api import urls as api_urls
 from apps.home import urls as home_urls
+from apps.wellknown import urls as wk_urls
 
 urlpatterns = [
+    path('.well-known/', include(wk_urls.urlpatterns)),
+
     path('admin/', admin.site.urls),
 
     path('api/', include(api_urls.urlpatterns)),
