@@ -116,13 +116,14 @@ class SpotifyTile extends RootTile {
     setTrack(elem, track) {
         let musicControl = elem.querySelector(".music-control");
         if (track["preview_url"] !== null) {
+            musicControl.hidden = false;
             musicControl.addEventListener("mouseup", (event) =>
                 this.onPlayPause(event.currentTarget, track["preview_url"])
             )
             this._setIconPlaying(musicControl.children[0], false);
         } else {
-            // Unable to play song so remove controls
-            musicControl.remove();
+            // Unable to play song so hide controls
+            musicControl.hidden = true;
         }
 
         elem.querySelector("figure div img").src = track["cover"];
