@@ -6,7 +6,9 @@ RUN apt-get update && apt-get upgrade -y && \
     cd /root && git clone https://github.com/FullHuman/purgecss
 WORKDIR /root/purgecss/packages/purgecss
 
-RUN npm install && npm run build && \
+RUN cd /root/purgecss && \
+    npm install && npm run build && \
+    cd /root/purgecss/packages/purgecss && \
     pkg . -t node18-linux-x64 --no-bytecode
 
 
